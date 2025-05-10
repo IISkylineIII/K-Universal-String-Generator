@@ -1,0 +1,30 @@
+def de_bruijn_sequence(k):
+    a = [0] * 2 * k
+    sequence = []
+
+    def db(t, p):
+        if t > k:
+            if k % p == 0:
+                for j in range(1, p + 1):
+                    sequence.append(a[j])
+        else:
+            a[t] = a[t - p]
+            db(t + 1, p)
+            for j in range(a[t - p] + 1, 2):
+                a[t] = j
+                db(t + 1, t)
+
+    db(1, 1)
+    return sequence
+
+def k_universal_circular_string(k):
+    binary_sequence = de_bruijn_sequence(k)
+    result = ''.join(map(str, binary_sequence))
+    return result[:-(k-1)]  # Remove the last (k-1) characters to make it circular
+
+# Sample Input
+k = 9
+
+result = k_universal_circular_string(k)
+
+print(result)
